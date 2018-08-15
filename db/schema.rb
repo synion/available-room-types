@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180808183321) do
+ActiveRecord::Schema.define(version: 20180815122252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "reservations", force: :cascade do |t|
+    t.date "checkin_date"
+    t.date "checkout_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reservations_rooms", id: false, force: :cascade do |t|
+    t.bigint "room_id", null: false
+    t.bigint "reservation_id", null: false
+    t.index ["room_id", "reservation_id"], name: "index_reservations_rooms_on_room_id_and_reservation_id"
+  end
 
   create_table "room_types", force: :cascade do |t|
     t.string "name"

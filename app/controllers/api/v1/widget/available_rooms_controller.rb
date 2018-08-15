@@ -4,8 +4,7 @@ module Api
       class AvailableRoomsController < ApplicationController
         def index
           respond_to do |format|
-            msg = { :status => "ok", :message => "Success!", :html => "<b>...</b>" }
-            format.json  { render :json => msg } # don't do msg.to_json
+            format.json { render json:  Room.available_rooms(params[:checkin_date]..params[:checkout_date]) }
           end
         end
       end
