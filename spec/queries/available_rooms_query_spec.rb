@@ -29,25 +29,28 @@ describe AvailableRoomsQuery do
 
       context 'when given period time overlaps with previously reserved rooms' do
         it 'returns room whit not overlapping given period time' do
-          free_room_1 = create(:room, reservations: [build(:reservation,
-                                                           checkin_date: Date.parse('2018-09-12'),
-                                                           checkout_date: Date.parse('2018-09-13'))])
+          free_room_1 = create(:room reservations: [build(:reservation,
+                                                          checkin_date: Date.parse('2018-09-12'),
+                                                          checkout_date: Date.parse('2018-09-13'))])
           free_room_2 = create(:room, reservations: [build(:reservation,
-                                                           checkin_date: Date.parse('2018-09-03'),
-                                                           checkout_date: Date.parse('2018-09-06'))])
+                                                          checkin_date: Date.parse('2018-09-03'),
+                                                          checkout_date: Date.parse('2018-09-06'))])
           free_room_3 = create(:room, reservations: [build(:reservation,
-                                                           checkin_date: Date.parse('2018-09-10'),
-                                                           checkout_date: Date.parse('2018-09-12'))])
+                                                          checkin_date: Date.parse('2018-09-10'),
+                                                          checkout_date: Date.parse('2018-09-12'))])
 
           reserved_room_1 = create(:room, reservations: [build(:reservation,
-                                                               checkin_date: Date.parse('2018-09-03'),
-                                                               checkout_date: Date.parse('2018-09-07'))])
+                                                              checkin_date: Date.parse('2018-09-03'),
+                                                              checkout_date: Date.parse('2018-09-12'))])
           reserved_room_2 = create(:room, reservations: [build(:reservation,
-                                                               checkin_date: Date.parse('2018-09-07'),
-                                                               checkout_date: Date.parse('2018-09-09'))])
+                                                              checkin_date: Date.parse('2018-09-07'),
+                                                              checkout_date: Date.parse('2018-09-09'))])
           reserved_room_3 = create(:room, reservations: [build(:reservation,
-                                                               checkin_date: Date.parse('2018-09-09'),
-                                                               checkout_date: Date.parse('2018-09-11'))])
+                                                              checkin_date: Date.parse('2018-09-09'),
+                                                              checkout_date: Date.parse('2018-09-11'))])
+          reserved_room_4 = create(:room, reservations: [build(:reservation,
+                                                              checkin_date: Date.parse('2018-09-05'),
+                                                              checkout_date: Date.parse('2018-09-07'))])
 
           available_rooms = AvailableRoomsQuery.call(date_range: Date.parse('2018-09-06')..Date.parse('2018-09-10'))
 

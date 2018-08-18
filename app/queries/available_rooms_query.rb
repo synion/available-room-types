@@ -20,16 +20,11 @@ class AvailableRoomsQuery
   end
 
   def all_available_rooms
-    reserved_room_ids = reserved_rooms.pluck(:id)
-    room.where.not(id: reserved_room_ids)
-  end
-
-  def reserved_rooms
-    reserved_rooms ||= room.left_joins(:reservations)
-                           .where(reservations: { checkin_date: date_range })
-                           .where.not(reservations: { checkin_date: date_range.max})
-                           .or(room.left_joins(:reservations).where(reservations: { checkout_date: date_range})
-                                   .where.not(reservations: { checkout_date: date_range.min}))
+    Room.left_joins(:reservations)
+      .where.not('reservations.checkin_date <= ? AND reservations.checkout_date >= ?', date_range.min, date_range.max )
+      .where.not('reservations.checkin_date >= ? AND reservations.checkout_date <= ?' , date_range.min, date_range.max)
+      .where.not('reservations.checkin_date < ? AND reservations.checkout_date > ?', date_range.max, date_range.max)
+      .where.not('reservations.checkin_date < ? AND reservations.checkout_date > ?', date_range.min, date_range.min)
   end
 
   def checkin_date_range
