@@ -9,7 +9,7 @@ describe AvailableRoomsQuery do
 
         available_rooms = AvailableRoomsQuery.call(date_range: Date.parse('2018-09-08')..Date.parse('2018-09-10'))
 
-        expect(available_rooms).to eq([room_1, room_2])
+        expect(available_rooms).to include(room_1, room_2)
       end
     end
 
@@ -23,13 +23,13 @@ describe AvailableRoomsQuery do
 
           available_rooms = AvailableRoomsQuery.call(date_range: Date.parse('2018-09-08')..Date.parse('2018-09-10'))
 
-          expect(available_rooms).to eq([free_room])
+          expect(available_rooms).to include(free_room)
         end
       end
 
       context 'when given period time overlaps with previously reserved rooms' do
         it 'returns room whit not overlapping given period time' do
-          free_room_1 = create(:room reservations: [build(:reservation,
+          free_room_1 = create(:room, reservations: [build(:reservation,
                                                           checkin_date: Date.parse('2018-09-12'),
                                                           checkout_date: Date.parse('2018-09-13'))])
           free_room_2 = create(:room, reservations: [build(:reservation,
@@ -54,7 +54,7 @@ describe AvailableRoomsQuery do
 
           available_rooms = AvailableRoomsQuery.call(date_range: Date.parse('2018-09-06')..Date.parse('2018-09-10'))
 
-          expect(available_rooms).to eq([free_room_1, free_room_2, free_room_3])
+          expect(available_rooms).to include(free_room_1, free_room_2, free_room_3)
         end
       end
     end

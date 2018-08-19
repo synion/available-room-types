@@ -25,6 +25,7 @@ class AvailableRoomsQuery
       .where.not('reservations.checkin_date >= ? AND reservations.checkout_date <= ?' , date_range.min, date_range.max)
       .where.not('reservations.checkin_date < ? AND reservations.checkout_date > ?', date_range.max, date_range.max)
       .where.not('reservations.checkin_date < ? AND reservations.checkout_date > ?', date_range.min, date_range.min)
+      .or(Room.left_joins(:reservations).where('reservations.id IS NULL'))
   end
 
   def checkin_date_range
