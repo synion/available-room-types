@@ -127,5 +127,15 @@ describe LinksPaginationGenerator do
         )
       end
     end
+
+    context 'when total_pages is 0' do
+      it 'returns hash with generates links with added page params' do
+        allow(ENV).to receive(:fetch).with('DOMAIN_URL').and_return('www.available_rooms.com')
+
+        link_genrator = LinksPaginationGenerator.call('/room_types?page=2', total_pages: 0 )
+
+        expect(link_genrator).to eql(links: {}, meta: {:total_pages=>0})
+      end
+    end
   end
 end

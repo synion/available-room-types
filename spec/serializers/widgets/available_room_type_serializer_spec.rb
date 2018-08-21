@@ -17,7 +17,7 @@ describe Widgets::AvailableRoomTypeSerializer do
             "data" => {
               "id" => room_type.id.to_s,
               "type" => "room_type",
-              "attributes" => {"name" => "Economic", "total_price" => 1000.0, "number_available_rooms" => 2}
+              "attributes" => {"name" => "Economic", "total_price" => '1000.0', "number_available_rooms" => '2'}
             }
           }
         )
@@ -47,16 +47,16 @@ describe Widgets::AvailableRoomTypeSerializer do
                 {
                   "attributes"=>{
                     "name"=>"Economic",
-                    "number_available_rooms"=>5,
-                    "total_price"=>300.0
+                    "number_available_rooms"=>'5',
+                    "total_price"=>'300.0'
                   },
                   "id"=>economic.id.to_s, "type"=>"room_type"
                 },
                 {
                   "attributes"=>{
                     "name"=>"president",
-                    "number_available_rooms"=>1,
-                    "total_price"=>500.0
+                    "number_available_rooms"=>'1',
+                    "total_price"=>'500.0'
                   },
                 "id"=>president.id.to_s, "type"=>"room_type"
                 }

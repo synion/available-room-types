@@ -28,10 +28,10 @@ class LinksPaginationGenerator
   end
 
   def links_informations
-    all_links = { **self_page, **first_page, **last_page }
+    all_links = total_pages != 0 ? { **self_page, **first_page, **last_page } : {}
 
-    all_links.merge!(next_page) if (total_pages > DEFAULT_FIRST) && (total_pages > current_page)
-    all_links.merge!(prev_page) if (total_pages > DEFAULT_FIRST) && (current_page > DEFAULT_FIRST)
+    all_links.merge!(next_page) if (total_pages > DEFAULT_FIRST) && (total_pages > current_page) && total_pages != 0
+    all_links.merge!(prev_page) if (total_pages > DEFAULT_FIRST) && (current_page > DEFAULT_FIRST) && total_pages != 0
 
     { links: all_links }
   end

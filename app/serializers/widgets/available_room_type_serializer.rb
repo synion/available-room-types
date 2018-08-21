@@ -6,11 +6,11 @@ module Widgets
 
     attributes :name
     attributes :total_price do |room_type|
-      room_type.total_price
+      room_type.total_price.to_s
     end
 
     attributes :number_available_rooms do |room_type|
-      room_type.count_room_ids
+      room_type.count_room_ids.to_s
     end
   end
 end
