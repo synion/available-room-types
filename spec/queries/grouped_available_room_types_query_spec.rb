@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe GroupedAvailableRoomTypesQuery do
   describe '.call' do
-    context 'when available room ids is a not empty collection' do
+    context 'when available room ids retuns collection of not reserved rooms' do
       it 'returns collection of room types with new methods' do
         date_range = Date.parse('2018-09-08')..Date.parse('2018-09-10')
         economic = create(:room_type, name: 'Economic', price: 100.00)
@@ -10,6 +10,10 @@ describe GroupedAvailableRoomTypesQuery do
         room_1 = create(:room, room_type: economic)
         room_2 = create(:room, room_type: economic)
         room_3 = create(:room, room_type: president)
+        room_4 = create(:room, room_type: president)
+
+        not_available_room_type = create(:room_type, name: 'Not available rooms type', price: 200.00)
+        create(:room, room_type: not_available_room_type)
 
         rooms = double(Room)
         allow(Room).to receive(:available_rooms)

@@ -6,7 +6,7 @@ describe UserAuthorization do
       context 'when user matched to given token' do
         it 'returns user' do
           user = create(:user, token: 'ABCD')
-          headers = { 'API_TOKEN' => 'ABCD' }
+          headers = { 'HTTP_API_TOKEN' => 'ABCD' }
 
           user_authorization = UserAuthorization.call(headers)
 
@@ -17,7 +17,7 @@ describe UserAuthorization do
       context 'when token not match to any user' do
         it 'returns nil and error with message' do
           create(:user, token: 'CDAB')
-          headers = { 'API_TOKEN' => 'ABCD' }
+          headers = { 'HTTP_API_TOKEN' => 'ABCD' }
 
           user_authorization = UserAuthorization.call(headers)
 

@@ -23,7 +23,7 @@ describe Api::V1::Widget::AvailableRoomsController do
 
                 params = { page: 2 , checkin_date: '2019-09-19', checkout_date: '2019-09-22' }
 
-                request.headers['API_TOKEN'] = user.token
+                request.headers['HTTP_API_TOKEN'] = user.token
                 get :index, params: params, format: :json
 
                 expect(JSON.parse(response.body)).to eq('data' =>
@@ -90,7 +90,7 @@ describe Api::V1::Widget::AvailableRoomsController do
 
                 params = { page: 2 , checkin_date: '2019-09-19', checkout_date: '2019-09-22' }
 
-                request.headers['API_TOKEN'] = user.token
+                request.headers['HTTP_API_TOKEN'] = user.token
                 get :index, params: params, format: :json
 
                 expect(JSON.parse(response.body)).to eq({ 'data' => [], 'meta' => { 'room_types' => [] } })
@@ -105,7 +105,7 @@ describe Api::V1::Widget::AvailableRoomsController do
 
               params = { page: 2 , checkin_date: '2019-09-19' }
 
-              request.headers['API_TOKEN'] = user.token
+              request.headers['HTTP_API_TOKEN'] = user.token
               get :index, params: params, format: :json
 
               expect(JSON.parse(response.body)).to eq('checkout_date' => ['should present'])
@@ -120,7 +120,7 @@ describe Api::V1::Widget::AvailableRoomsController do
 
             params = { page: 2 , checkout_date: '2019-09-19' }
 
-            request.headers['API_TOKEN'] = user.token
+            request.headers['HTTP_API_TOKEN'] = user.token
             get :index, params: params, format: :json
 
             expect(JSON.parse(response.body)).to eq('checkin_date' => ['should present'])
@@ -140,7 +140,7 @@ describe Api::V1::Widget::AvailableRoomsController do
           room_type_6 = create(:room_type, name: 'Economic', rooms: build_list(:room, 10), price: 200.00)
           params = { checkin_date: '2019-09-19', checkout_date: '2019-09-22' }
 
-          request.headers['API_TOKEN'] = user.token
+          request.headers['HTTP_API_TOKEN'] = user.token
           get :index, params: params, format: :json
 
           expect(JSON.parse(response.body)).to eq('data' =>
@@ -193,12 +193,68 @@ describe Api::V1::Widget::AvailableRoomsController do
 
         params = { page: 2 , checkout_date: '2019-09-19', checkout_date: '2019-09-21' }
 
-        request.headers['API_TOKEN'] = 'ASD343ASC23'
+        request.headers['HTTP_API_TOKEN'] = 'ASD343ASC23'
         get :index, params: params, format: :json
 
         expect(response.body).to eq('Not Authorized')
         expect(response).to have_http_status(401)
       end
+    end
+
+    it 'returns grouped available rooms types' do
+      user = create(:user, token: 'A23BCD')
+      create(:room_type, name: 'Double')
+
+      params = { page: 2 , checkin_date: '2019-09-19', checkout_date: '2019-09-22' }
+
+      allow(RoomType).to receive(:grouped_available_rooms_types).and_call_original
+
+      request.headers['HTTP_API_TOKEN'] = user.token
+      get :index, params: params, format: :json
+
+      expect(RoomType).to have_received(:grouped_available_rooms_types).with('2019-09-19'..'2019-09-22')
+    end
+
+    it 'returns json from serialize' do
+      user = create(:user, token: 'A23BCD')
+      create(:room_type, name: 'Double')
+
+      params = { page: 2 , checkin_date: '2019-09-19', checkout_date: '2019-09-22' }
+
+      serializer = double(Widgets::AvailableRoomTypeSerializer)
+      allow(Widgets::AvailableRoomTypeSerializer).to receive(:new).and_return(serializer)
+
+      request.headers['HTTP_API_TOKEN'] = user.token
+      get :index, params: params, format: :json
+
+      expect(Widgets::AvailableRoomTypeSerializer).to have_received(:new).with(kind_of(ActiveRecord::Relation),
+                                                                                      kind_of(Hash))
+    end
+
+    it 'return links from paginator' do
+       user = create(:user, token: 'A23BCD')
+       create(:room_type, name: 'Double')
+
+      params = { page: 2 , checkin_date: '2019-09-19', checkout_date: '2019-09-22' }
+      allow(LinksPaginationGenerator).to receive(:new).and_call_original
+
+      request.headers['HTTP_API_TOKEN'] = user.token
+      get :index, params: params, format: :json
+
+      expect(LinksPaginationGenerator).to have_received(:new).with(request.fullpath, kind_of(Hash) )
+    end
+
+    it 'use UserAuthorization' do
+       user = create(:user, token: 'A23BCD')
+       create(:room_type, name: 'Double')
+
+      params = { page: 2 , checkin_date: '2019-09-19', checkout_date: '2019-09-22' }
+      allow(UserAuthorization).to receive(:call).and_call_original
+
+      request.headers['HTTP_API_TOKEN'] = user.token
+      get :index, params: params, format: :json
+
+      expect(UserAuthorization).to have_received(:call).with(request.headers)
     end
   end
 end

@@ -6,6 +6,7 @@ describe Widget::AvailableRoomForm do
       params = { checkin_date: nil, checkout_date: nil}
 
       form = Widget::AvailableRoomForm.new(params)
+
       expect(form.valid?).to be_falsey
       expect(form.errors).to have_key(:checkin_date)
       expect(form.errors).to have_key(:checkin_date)

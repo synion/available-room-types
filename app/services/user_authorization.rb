@@ -1,5 +1,5 @@
 class UserAuthorization
-  AUTHORIZATION_KEY = 'API_TOKEN'.freeze
+  AUTHORIZATION_KEY = 'HTTP_API_TOKEN'.freeze
 
   attr_reader :errors, :result
 
@@ -26,7 +26,7 @@ class UserAuthorization
   def user
     @user ||= User.find_by(token: auth_header_token)
     unless @user
-      errors.push('Not Authorized')
+      errors << 'Not Authorized'
     end
     @user
   end
