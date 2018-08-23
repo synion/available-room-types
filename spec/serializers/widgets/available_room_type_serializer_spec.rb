@@ -2,28 +2,6 @@ require 'rails_helper'
 
 describe Widgets::AvailableRoomTypeSerializer do
   describe '.serialized_json' do
-    context 'when serialize only one room type' do
-      it 'returns json with presented attributes' do
-        room_type = create(:room_type,
-                           :from_grouped_available_room_types,
-                           total_price: 1000.00,
-                           count_room_ids: 2,
-                           name: 'Economic')
-
-        serialized_room_type = Widgets::AvailableRoomTypeSerializer.new(room_type).serialized_json
-
-        expect(JSON.parse(serialized_room_type)).to eql(
-          {
-            "data" => {
-              "id" => room_type.id.to_s,
-              "type" => "room_type",
-              "attributes" => {"name" => "Economic", "total_price" => '1000.0', "number_available_rooms" => '2'}
-            }
-          }
-        )
-      end
-    end
-
     context 'when serialize collection of room types' do
       context 'when options links and meta are empty' do
         it 'returns json with presented attributes and links' do
@@ -45,20 +23,20 @@ describe Widgets::AvailableRoomTypeSerializer do
              {
               "data" => [
                 {
-                  "attributes"=>{
-                    "name"=>"Economic",
-                    "number_available_rooms"=>'5',
-                    "total_price"=>'300.0'
+                  "attributes" => {
+                    "name" => "Economic",
+                    "number_available_rooms" => '5',
+                    "total_price" => '300.0'
                   },
-                  "id"=>economic.id.to_s, "type"=>"room_type"
+                  "id" => economic.id.to_s, "type" => "room_type"
                 },
                 {
-                  "attributes"=>{
-                    "name"=>"president",
-                    "number_available_rooms"=>'1',
-                    "total_price"=>'500.0'
+                  "attributes" => {
+                    "name" => "president",
+                    "number_available_rooms" => '1',
+                    "total_price" => '500.0'
                   },
-                "id"=>president.id.to_s, "type"=>"room_type"
+                "id" => president.id.to_s, "type" => "room_type"
                 }
               ]
             }
@@ -81,13 +59,12 @@ describe Widgets::AvailableRoomTypeSerializer do
 
           expect(JSON.parse(serialized_room_type)).to include("links"=>
             {
-              "self"=>"http::/available_room.com/api/v1/widget/available_rooms?page=1",
-             "next"=>"http::/available_room.com/api/v1/widget/available_rooms?page=2",
-             "prev"=>""
-            }
+              "self" => "http::/available_room.com/api/v1/widget/available_rooms?page=1",
+              "next" => "http::/available_room.com/api/v1/widget/available_rooms?page=2",
+              "prev" => ""
+            },
+            'meta' => { 'total_pages' => 2 }
           )
-
-          expect(JSON.parse(serialized_room_type)).to include("meta"=> {'total_pages' => 2})
         end
       end
     end

@@ -7,7 +7,7 @@ module Api
           form = ::Widget::AvailableRoomForm.new(params)
           if form.valid?
             render json: Widgets::AvailableRoomTypeSerializer.new(paginate_room_type,
-                                                                  pagination_links.merge(**meta_information))
+                                                                  pagination_links.deep_merge(**meta_information))
           else
             render json: form.errors, status: 400
           end

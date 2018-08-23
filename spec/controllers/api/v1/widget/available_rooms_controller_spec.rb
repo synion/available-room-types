@@ -64,8 +64,9 @@ describe Api::V1::Widget::AvailableRoomsController do
                   'meta' =>
                     {
                       'room_types' =>
-                      ['Double', 'Double Double', 'Economic', 'King', 'President',
-                       'Queen', 'Single', 'Studio', 'Super Studio', 'Triple', 'Twin']
+                        ['Double', 'Double Double', 'Economic', 'King', 'President',
+                        'Queen', 'Single', 'Studio', 'Super Studio', 'Triple', 'Twin'],
+                      'total_pages' => '3'
                     },
                   'links' =>
                     {
@@ -93,7 +94,8 @@ describe Api::V1::Widget::AvailableRoomsController do
                 request.headers['HTTP_API_TOKEN'] = user.token
                 get :index, params: params, format: :json
 
-                expect(JSON.parse(response.body)).to eq({ 'data' => [], 'meta' => { 'room_types' => [] } })
+                expect(JSON.parse(response.body)).to eq('data' => [],
+                                                        'meta' => { 'room_types' => [], 'total_pages' => '0' })
                 expect(response).to have_http_status(200)
               end
             end
@@ -171,7 +173,8 @@ describe Api::V1::Widget::AvailableRoomsController do
                 'attributes' => { 'name' => 'King', 'number_available_rooms' => '15', 'total_price' => '1320.0' }
               }
             ],
-            'meta' => { 'room_types' => ['Double', 'Economic', 'King', 'Queen', 'Single', 'Triple'] },
+            'meta' => { 'room_types' => ['Double', 'Economic', 'King', 'Queen', 'Single', 'Triple'],
+                        'total_pages' => '2' },
             'links' => {
                'self' => 'localhost/api/v1/widget/available_rooms'\
                        '?checkin_date=2019-09-19&checkout_date=2019-09-22&page=1',

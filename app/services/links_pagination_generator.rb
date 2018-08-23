@@ -20,7 +20,7 @@ class LinksPaginationGenerator
   attr_reader :path, :total_pages
 
   def meta_total_pages_information
-    { meta: { total_pages: total_pages } }
+    { meta: { total_pages: total_pages.to_s } }
   end
 
   def current_page

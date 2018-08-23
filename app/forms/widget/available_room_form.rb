@@ -2,8 +2,8 @@ require "action_controller/metal/strong_parameters"
 
 module Widget
   class AvailableRoomForm
-     include Virtus.model
-     include ActiveModel::Validations
+    include Virtus.model
+    include ActiveModel::Validations
 
     DATE_FORMAT = /\d{4}-\d{2}-\d{2}/.freeze
 

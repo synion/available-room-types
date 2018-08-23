@@ -9,7 +9,7 @@ describe LinksPaginationGenerator do
         link_genrator = LinksPaginationGenerator.call('/room_types', total_pages: 2)
 
         expect(link_genrator).to eql(
-          meta: { total_pages: 2 },
+          meta: { total_pages: '2' },
           links: {
             self: 'www.available_rooms.com/room_types?page=1',
             first: 'www.available_rooms.com/room_types?page=1',
@@ -27,7 +27,7 @@ describe LinksPaginationGenerator do
         link_genrator = LinksPaginationGenerator.call('/room_types?page=2', total_pages: 2)
 
         expect(link_genrator).to eql(
-          meta: { total_pages: 2 },
+          meta: { total_pages: '2' },
           links: {
             self: 'www.available_rooms.com/room_types?page=2',
             first: 'www.available_rooms.com/room_types?page=1',
@@ -45,7 +45,7 @@ describe LinksPaginationGenerator do
         link_genrator = LinksPaginationGenerator.call('/room_types', total_pages: 2)
 
         expect(link_genrator).to eql(
-          meta: { total_pages: 2 },
+          meta: { total_pages: '2' },
           links: {
             self: 'www.available_rooms.com/room_types?page=1',
             first: 'www.available_rooms.com/room_types?page=1',
@@ -63,7 +63,7 @@ describe LinksPaginationGenerator do
         link_genrator = LinksPaginationGenerator.call('/room_types?page=2', total_pages: 3)
 
         expect(link_genrator).to eql(
-          meta: { total_pages: 3 },
+          meta: { total_pages: '3' },
           links: {
             self: 'www.available_rooms.com/room_types?page=2',
             first: 'www.available_rooms.com/room_types?page=1',
@@ -82,7 +82,7 @@ describe LinksPaginationGenerator do
         link_genrator = LinksPaginationGenerator.call('/room_types', total_pages: 1)
 
         expect(link_genrator).to eql(
-          meta: { total_pages: 1 },
+          meta: { total_pages: '1' },
           links: {
             self: 'www.available_rooms.com/room_types?page=1',
             first: 'www.available_rooms.com/room_types?page=1',
@@ -99,7 +99,7 @@ describe LinksPaginationGenerator do
         link_genrator = LinksPaginationGenerator.call('/room_types?checkin_date=20-01-2012&page=1', total_pages: 1)
 
         expect(link_genrator).to eql(
-          meta: { total_pages: 1 },
+          meta: { total_pages: '1' },
           links: {
             self: 'www.available_rooms.com/room_types?checkin_date=20-01-2012&page=1',
             first: 'www.available_rooms.com/room_types?checkin_date=20-01-2012&page=1',
@@ -116,7 +116,7 @@ describe LinksPaginationGenerator do
         link_genrator = LinksPaginationGenerator.call('/room_types?page=2', total_pages: 3)
 
         expect(link_genrator).to eql(
-          meta: { total_pages: 3 },
+          meta: { total_pages: '3' },
           links: {
             self: 'www.available_rooms.com/room_types?page=2',
             first: 'www.available_rooms.com/room_types?page=1',
@@ -134,7 +134,7 @@ describe LinksPaginationGenerator do
 
         link_genrator = LinksPaginationGenerator.call('/room_types?page=2', total_pages: 0 )
 
-        expect(link_genrator).to eql(links: {}, meta: {:total_pages=>0})
+        expect(link_genrator).to eql(links: {}, meta: { total_pages: '0'} )
       end
     end
   end
